@@ -30,6 +30,13 @@ def represent(
         )
         result["results"] = embedding_objs
         return result
+    except ValueError as err:
+        # Capture specific spoof exception
+        if "Spoof detected" in str(err):
+            return {"error": "Anti-spoofing failed: Spoofing detected in the image."}, 400
+        else:
+            tb_str = traceback.format_exc()
+            return {"error": f"Exception while analyzing: {str(err)} - {tb_str}"}, 400
     except Exception as err:
         tb_str = traceback.format_exc()
         return {"error": f"Exception while representing: {str(err)} - {tb_str}"}, 400
@@ -57,6 +64,13 @@ def verify(
             anti_spoofing=anti_spoofing,
         )
         return obj
+    except ValueError as err:
+        # Capture specific spoof exception
+        if "Spoof detected" in str(err):
+            return {"error": "Anti-spoofing failed: Spoofing detected in the image."}, 400
+        else:
+            tb_str = traceback.format_exc()
+            return {"error": f"Exception while analyzing: {str(err)} - {tb_str}"}, 400
     except Exception as err:
         tb_str = traceback.format_exc()
         return {"error": f"Exception while verifying: {str(err)} - {tb_str}"}, 400
@@ -83,6 +97,13 @@ def analyze(
         )
         result["results"] = demographies
         return result
+    except ValueError as err:
+        # Capture specific spoof exception
+        if "Spoof detected" in str(err):
+            return {"error": "Anti-spoofing failed: Spoofing detected in the image."}, 400
+        else:
+            tb_str = traceback.format_exc()
+            return {"error": f"Exception while analyzing: {str(err)} - {tb_str}"}, 400
     except Exception as err:
         tb_str = traceback.format_exc()
         return {"error": f"Exception while analyzing: {str(err)} - {tb_str}"}, 400
