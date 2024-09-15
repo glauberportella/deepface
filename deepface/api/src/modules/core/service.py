@@ -29,11 +29,13 @@ def represent(
             max_faces=max_faces,
         )
         result["results"] = embedding_objs
+        # Assume is_real true as anti_spoofing throws ValueError
+        result["is_real"] = True
         return result
     except ValueError as err:
         # Capture specific spoof exception
         if "Spoof detected" in str(err):
-            return {"error": "Anti-spoofing failed: Spoofing detected in the image."}, 400
+            return {"is_real": False, "error": "Spoofing detected in the image."}, 400
         else:
             tb_str = traceback.format_exc()
             return {"error": f"Exception while analyzing: {str(err)} - {tb_str}"}, 400
@@ -67,7 +69,7 @@ def verify(
     except ValueError as err:
         # Capture specific spoof exception
         if "Spoof detected" in str(err):
-            return {"error": "Anti-spoofing failed: Spoofing detected in the image."}, 400
+            return {"verified": False, "is_real": False, "error": "Anti-spoofing failed: Spoofing detected in the image."}, 400
         else:
             tb_str = traceback.format_exc()
             return {"error": f"Exception while analyzing: {str(err)} - {tb_str}"}, 400
@@ -96,11 +98,13 @@ def analyze(
             anti_spoofing=anti_spoofing,
         )
         result["results"] = demographies
+        # Assume is_real true as anti_spoofing throws ValueError
+        result["is_real"] = True
         return result
     except ValueError as err:
         # Capture specific spoof exception
         if "Spoof detected" in str(err):
-            return {"error": "Anti-spoofing failed: Spoofing detected in the image."}, 400
+            return {"is_real": False, "error": "Anti-spoofing failed: Spoofing detected in the image."}, 400
         else:
             tb_str = traceback.format_exc()
             return {"error": f"Exception while analyzing: {str(err)} - {tb_str}"}, 400
